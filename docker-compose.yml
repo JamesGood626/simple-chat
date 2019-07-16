@@ -1,0 +1,8 @@
+version: "0.0.1"
+services:
+  web:
+    build: .
+    ports:
+      - "4000:80"
+    environment:
+      LOCALHOST: host.docker.internal
