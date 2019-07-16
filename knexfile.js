@@ -27,6 +27,9 @@ module.exports = {
     }
   },
 
+  // TODO:
+  // - set production version to run w/ mix_env=PROD
+  // - Create environment variables for database, user, password
   production: {
     client: "postgresql",
     connection: {
