@@ -1,4 +1,5 @@
 const { saveUserToDatabase } = require("../database/user/inserts");
+const { findUser } = require("../database/user/queries");
 
 class User {
   constructor(username) {
@@ -8,6 +9,10 @@ class User {
 
   async saveToDatabase() {
     return await saveUserToDatabase({ user_name: this.username });
+  }
+
+  async findUser() {
+    return await findUser({ user_name: this.username });
   }
 }
 

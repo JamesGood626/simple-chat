@@ -1,0 +1,10 @@
+<%- include('../layouts/header'); -%>
+<body>
+  <h3>Sign Up</h3>
+  <form action="/user/signup" method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    Username: <input type="text" name="username" />
+    <button type="submit">Submit</button>
+  </form>
+</body>
+<%- include('../layouts/footer'); -%>
