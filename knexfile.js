@@ -1,6 +1,22 @@
 // Update with your config settings.
 
 module.exports = {
+  test: {
+    client: "postgresql",
+    connection: {
+      host: process.env.LOCALHOST ? process.env.LOCALHOST : "127.0.0.1",
+      user: "jamesgood",
+      password: "postgres",
+      database: "simple_chat_test"
+    },
+    migrations: {
+      directory: __dirname + "/db/migrations"
+    },
+    seeds: {
+      directory: __dirname + "/db/seeds/test"
+    }
+  },
+
   development: {
     client: "postgresql",
     connection: {
@@ -8,6 +24,12 @@ module.exports = {
       user: "jamesgood",
       password: "postgres",
       database: "simple_chat"
+    },
+    migrations: {
+      directory: __dirname + "/db/migrations"
+    },
+    seeds: {
+      directory: __dirname + "/db/seeds/development"
     }
   },
 
@@ -23,6 +45,7 @@ module.exports = {
       max: 10
     },
     migrations: {
+      directory: __dirname + "/db/migrations",
       tableName: "knex_migrations"
     }
   },
@@ -42,6 +65,7 @@ module.exports = {
       max: 10
     },
     migrations: {
+      directory: __dirname + "/db/migrations",
       tableName: "knex_migrations"
     }
   }

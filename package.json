@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development node ./src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "migrate_db_up": "./node_modules/.bin/knex migrate:latest",
+    "migrate_db_down": "./node_modules/.bin/knex migrate:rollback",
+    "migrate_testdb_up": "./node_modules/.bin/knex migrate:latest --env test",
+    "migrate_testdb_down": "./node_modules/.bin/knex migrate:rollback --env test",
+    "seed_db": "./node_modules/.bin/knex seed:run --env development"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +24,7 @@
     "pg": "^7.11.0"
   },
   "devDependencies": {
-    "jest": "^24.8.0"
+    "jest": "^24.8.0",
+    "supertest": "^4.0.2"
   }
 }
