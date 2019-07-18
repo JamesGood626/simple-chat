@@ -38,6 +38,12 @@ router.get("/new", async function(req, res) {
   });
 });
 
+// TODO: REMOVE
+// router.get("/test", function(req, res) {
+//   console.log("the path: ", __dirname + "/index.html");
+//   res.sendFile(path.join(__dirname + "/index.html"));
+// });
+
 router.post("/new", async function(req, res) {
   const { chatName } = req.body;
   const chat = new Chat(chatName);
