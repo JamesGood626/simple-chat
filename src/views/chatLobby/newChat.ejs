@@ -1,0 +1,10 @@
+<%- include('../layouts/header'); -%>
+<body>
+  <h3>New Chat</h3>
+  <form action="/chat-lobby/new" method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    Chat Name: <input type="text" name="chatName" />
+    <button type="submit">Submit</button>
+  </form>
+</body>
+<%- include('../layouts/footer'); -%>

@@ -1,5 +1,24 @@
 <%- include('../layouts/header'); -%>
 <body>
   <h3>Welcome, <%= user_name %></h3>
+  <div>
+    <% chatList.forEach(function(chat) { %>
+    <div>
+      <h4><%= chat.name %></h4>
+      <button class="chat-join-btn" data-channel="<%= chat.channel %>">
+        Join
+      </button>
+    </div>
+    <% }); %>
+  </div>
+  <script>
+    const chatJoinBtn = document.querySelectorAll(".chat-join-btn");
+    chatJoinBtn.forEach(btn =>
+      btn.addEventListener("click", e => {
+        const { channel } = e.target.dataset;
+        console.log("the channel: ", channel);
+      })
+    );
+  </script>
 </body>
 <%- include('../layouts/footer'); -%>

@@ -31,7 +31,7 @@ describe("POST /user/signup", function() {
   beforeEach(done => {
     request(app)
       .get("/user/signup")
-      .end((er, resp) => {
+      .end((err, resp) => {
         // getting cookies
         cookies = resp.headers["set-cookie"];
         // extracting token
