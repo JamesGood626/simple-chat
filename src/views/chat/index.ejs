@@ -1,0 +1,89 @@
+<%- include('../layouts/header'); -%>
+<body>
+  <h3>Welcome to chat: <%= name %></h3>
+  <div id="app">
+    {{ text }}
+    <ul id="example-1">
+      <li v-for="message in messages">
+        {{ message.text }}
+      </li>
+    </ul>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // let messages;
+    const channel = window.location.pathname.split("/")[2];
+
+    // const fetchChatMessages = path => {
+    //   const request = new XMLHttpRequest();
+    //   request.addEventListener("load", gotWisdom);
+    //   request.open("GET", `http://localhost:4000${path}`);
+    //   request.send({ channel });
+    // };
+
+    // function gotWisdom() {
+    //   console.log("what is this? ", this);
+    //   console.log(
+    //     "You've got messages: ",
+    //     JSON.parse(this.responseText).messages
+    //   );
+    //   messages = JSON.parse(this.responseText).messages;
+    // }
+
+    // let messages;
+    // const fetchChatMessages = path => {
+    //   const request = new XMLHttpRequest();
+    //   request.addEventListener("load", this.gotWisdom);
+    //   request.open("GET", `http://localhost:4000${path}`);
+    //   request.send({ channel });
+    // };
+    // const gotWisdom = () => {
+    //   console.log("what is this? ", this);
+    //   console.log(
+    //     "You've got messages: ",
+    //     JSON.parse(this.responseText).messages
+    //   );
+    //   messages = JSON.parse(this.responseText).messages;
+    // };
+
+    // fetchChatMessages(`/chat/messages/${channel}`);
+
+    var app = new Vue({
+      el: "#app",
+      data: {
+        // Fetch the messages inside of the socket.io channel join,
+        // so that you may pass that data into here
+        text: "Hello Vue!",
+        messages: null
+      },
+      created: function() {
+        console.log("Vue's before create running");
+        console.log("axios: ", axios);
+        this.fetchChatMessages(`/chat/messages/${channel}`);
+      },
+      methods: {
+        async fetchChatMessages(path) {
+          const {
+            data: { messages }
+          } = await axios.get(path);
+          console.log("axios result: ", messages);
+          this.messages = messages;
+        }
+      }
+    });
+
+    var socket = io("http://localhost:4000/");
+
+    socket.on("channel-joined", data => {
+      console.log("channel joined: ", data);
+    });
+
+    console.log("emitting join-chat");
+    socket.emit("join-chat", channel, data => {
+      console.log(data);
+    });
+  </script>
+</body>
+<%- include('../layouts/footer'); -%>

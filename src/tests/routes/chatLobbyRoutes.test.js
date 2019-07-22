@@ -1,6 +1,6 @@
 const request = require("supertest");
-const app = require("../../../app");
-const knex = require("../../../database");
+const app = require("../../app");
+const knex = require("../../database");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 

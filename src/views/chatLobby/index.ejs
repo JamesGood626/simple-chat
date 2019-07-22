@@ -5,33 +5,41 @@
     <% chatList.forEach(function(chat) { %>
     <div>
       <h4><%= chat.name %></h4>
-      <button class="just-one">Just One</button>
-      <button class="chat-join-btn" data-channel="<%= chat.channel %>">
-        Join
-      </button>
+      <a href="/chat/<%= chat.channel %>">Join Chat</a>
     </div>
     <% }); %>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    var socket = io("http://localhost:4000/");
-    const chatJoinBtn = document.querySelectorAll(".chat-join-btn");
-    const justOne = document.querySelector(".just-one");
-    justOne.addEventListener("click", e => {
-      console.log("emitting btnclick");
-      socket.emit("btnclick");
-      // the data returned from the server increments by 1
-      // with each additional click... why?
-      socket.on("btnclick-response", data => {
-        console.log("data from the server: ", data);
-      });
-    });
-    chatJoinBtn.forEach(btn =>
-      btn.addEventListener("click", e => {
-        const { channel } = e.target.dataset;
-        console.log("the channel: ", channel);
-      })
-    );
+    // var socket = io("http://localhost:4000/");
+
+    // socket.on("btnclick-response", data => {
+    //   console.log("data from the server: ", data);
+    // });
+
+    // socket.on("channel-joined", data => {
+    //   console.log("channel joined: ", data);
+    // });
+
+    // const chatJoinBtn = document.querySelectorAll(".chat-join-btn");
+    // const justOne = document.querySelector(".just-one");
+
+    // justOne.addEventListener("click", e => {
+    //   console.log("emitting btnclick");
+    //   socket.emit("btnclick");
+    // });
+
+    // chatJoinBtn.forEach(btn =>
+    //   btn.addEventListener("click", e => {
+    //     const { channel } = e.target.dataset;
+    //     console.log("the channel: ", channel);
+    //     // socket.emit("join-chat")
+    //     console.log("emitting ferret");
+    //     socket.emit("join-chat", channel, data => {
+    //       console.log(data);
+    //     });
+    //   })
+    // );
   </script>
 </body>
 <%- include('../layouts/footer'); -%>

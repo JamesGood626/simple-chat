@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const applyMiddleware = require("./middleware");
-const { userRoutes, chatLobbyRoutes } = require("./routes");
+const { userRoutes, chatLobbyRoutes, chatRoutes } = require("./routes");
 
 applyMiddleware(app);
 
@@ -11,5 +11,6 @@ app.set("views", "./src/views");
 
 app.use("/user", userRoutes);
 app.use("/chat-lobby", chatLobbyRoutes);
+app.use("/chat", chatRoutes);
 
 module.exports = app;
