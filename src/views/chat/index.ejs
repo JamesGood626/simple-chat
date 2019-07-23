@@ -8,68 +8,52 @@
         {{ message.text }}
       </li>
     </ul>
+    <div id="message-input-container">
+      <input id="message-input" type="text" v-on:keyup="setMessageText" />
+      <button v-on:click="createChatMessage">Send Message</button>
+    </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    // let messages;
     const channel = window.location.pathname.split("/")[2];
-
-    // const fetchChatMessages = path => {
-    //   const request = new XMLHttpRequest();
-    //   request.addEventListener("load", gotWisdom);
-    //   request.open("GET", `http://localhost:4000${path}`);
-    //   request.send({ channel });
-    // };
-
-    // function gotWisdom() {
-    //   console.log("what is this? ", this);
-    //   console.log(
-    //     "You've got messages: ",
-    //     JSON.parse(this.responseText).messages
-    //   );
-    //   messages = JSON.parse(this.responseText).messages;
-    // }
-
-    // let messages;
-    // const fetchChatMessages = path => {
-    //   const request = new XMLHttpRequest();
-    //   request.addEventListener("load", this.gotWisdom);
-    //   request.open("GET", `http://localhost:4000${path}`);
-    //   request.send({ channel });
-    // };
-    // const gotWisdom = () => {
-    //   console.log("what is this? ", this);
-    //   console.log(
-    //     "You've got messages: ",
-    //     JSON.parse(this.responseText).messages
-    //   );
-    //   messages = JSON.parse(this.responseText).messages;
-    // };
-
-    // fetchChatMessages(`/chat/messages/${channel}`);
 
     var app = new Vue({
       el: "#app",
       data: {
-        // Fetch the messages inside of the socket.io channel join,
-        // so that you may pass that data into here
         text: "Hello Vue!",
-        messages: null
+        messages: [],
+        messageText: null
       },
       created: function() {
         console.log("Vue's before create running");
-        console.log("axios: ", axios);
         this.fetchChatMessages(`/chat/messages/${channel}`);
       },
       methods: {
+        setMessageText(e) {
+          this.messageText = e.target.value;
+        },
         async fetchChatMessages(path) {
           const {
             data: { messages }
           } = await axios.get(path);
-          console.log("axios result: ", messages);
+          // console.log("axios result: ", messages);
           this.messages = messages;
+        },
+        async createChatMessage(text) {
+          document.getElementById("message-input").value = "";
+          const { status, data } = await axios.post(
+            `/chat/messages/${channel}`,
+            {
+              messageText: this.messageText
+            }
+          );
+
+          if (status === 201) {
+            this.messageText = "";
+            this.messages = [...this.messages, data.data];
+          }
         }
       }
     });
