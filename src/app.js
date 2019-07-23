@@ -3,7 +3,12 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const applyMiddleware = require("./middleware");
-const { userRoutes, chatLobbyRoutes, chatRoutes } = require("./routes");
+const {
+  homeRoutes,
+  userRoutes,
+  chatLobbyRoutes,
+  chatRoutes
+} = require("./routes");
 
 applyMiddleware(app);
 
@@ -42,6 +47,7 @@ app.use(function(req, res, next) {
   res.locals.io = io;
   next();
 });
+app.use("/", homeRoutes);
 app.use("/user", userRoutes);
 app.use("/chat-lobby", chatLobbyRoutes);
 app.use("/chat", chatRoutes);

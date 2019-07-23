@@ -1,9 +1,9 @@
 <%- include('../layouts/header'); -%>
 <body>
+  <a href="/chat-lobby">Back to Chat Lobby</a>
   <h3>Welcome to chat: <%= name %></h3>
   <div id="app">
-    {{ text }}
-    <ul id="example-1">
+    <ul id="message-list">
       <li v-for="message in messages">
         {{ message.sender }} {{ message.text }}
       </li>
@@ -18,32 +18,14 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const channel = window.location.pathname.split("/")[2];
-    // const joinChat = () => {
-    //   const socket = io("http://localhost:4000/");
-
-    //   socket.on("channel-joined", data => {
-    //     console.log("channel joined: ", data);
-    //   });
-
-    //   socket.on("new-chat-message", data => {
-    //     console.log("new-chat-message: ", data);
-    //   });
-
-    //   console.log("emitting join-chat");
-    //   socket.emit("join-chat", channel, data => {
-    //     console.log(data);
-    //   });
-    // };
 
     var app = new Vue({
       el: "#app",
       data: {
-        text: "Hello Vue!",
         messages: null,
         messageText: null
       },
       created: function() {
-        console.log("Vue's before create running");
         this.joinChat(channel);
         this.fetchChatMessages(`/chat/messages/${channel}`);
       },
@@ -52,31 +34,27 @@
           const socket = io(window.location.host);
 
           socket.on("channel-joined", data => {
-            console.log("channel joined: ", data);
+            console.log("channel joined");
           });
 
           socket.on("new-chat-message", data => {
-            // console.log("new-chat-message: ", data);
             this.handleNewMessage(data);
           });
 
-          console.log("emitting join-chat");
           socket.emit("join-chat", channel, data => {
-            console.log("join-chat data: ", data);
+            console.log("joined chat");
           });
         },
         setMessageText(e) {
           this.messageText = e.target.value;
         },
         handleNewMessage(data) {
-          console.log("Data inside handleNewMessage: ", data);
           this.messages = [...this.messages, data.data];
         },
         async fetchChatMessages(path) {
           const {
             data: { messages }
           } = await axios.get(path);
-          // console.log("axios result: ", messages);
           this.messages = messages;
         },
         async createChatMessage(text) {
@@ -90,7 +68,9 @@
 
           this.messageText = "";
           if (status === 302) {
-            // `localhost:4000/${data.redirectTO}`
+            // A 302 should never make it here unless the user is manually sending
+            // requests...
+            // MAYBE? `localhost:4000/${data.redirectTO}`
             window.location.replace(data.redirectTo);
           }
           if (status === 400) {
