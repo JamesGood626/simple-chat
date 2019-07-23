@@ -1,31 +1,17 @@
+const app = require("../../app");
 const express = require("express");
 const router = express.Router();
 const Chat = require("../../entities/chat");
 const { createMessage } = require("../../database/chat/inserts");
 const { fetchChat, fetchChatMessages } = require("../../database/chat/queries");
 
-router.get("/messages/:channel", async function(req, res) {
-  const { channel } = req.params;
-  console.log("The channel in /chat/messages: ", channel);
-  const [
-    status,
-    {
-      data: { id }
-    }
-  ] = await fetchChat(channel);
-  const messages = await fetchChatMessages(id);
-  console.log("The emssages!: ", messages);
-  res.status(200);
-  res.send({ messages });
-});
-
 router.get("/:channel", async function(req, res) {
+  const userData = req.cookies.cookie;
+  if (userData === undefined) {
+    return res.redirect("/user/login");
+  }
   const { channel } = req.params;
-  console.log("the channel to be joined: ", channel);
-  // TODO: Also, fetch all chat messages here
-  //       to pass into ejs template.
-  // Use vue.js component for chat/joining socket.io
-  // channel & chat channel room.
+
   const [
     status,
     {
@@ -39,8 +25,35 @@ router.get("/:channel", async function(req, res) {
   });
 });
 
+// Vue component calls this
+// Get all messages for a given chat channel
+router.get("/messages/:channel", async function(req, res) {
+  const userData = req.cookies.cookie;
+  if (userData === undefined) {
+    res.status(302);
+    return res.send({ redirectTo: "/user/login" });
+  }
+  const { channel } = req.params;
+  const [
+    status,
+    {
+      data: { id }
+    }
+  ] = await fetchChat(channel);
+  const messages = await fetchChatMessages(id);
+  console.log("The emssages!: ", messages);
+  res.status(200);
+  res.send({ messages });
+});
+
+// Vue component calls this
 // Create a chat message
 router.post("/messages/:channel", async function(req, res) {
+  const userData = req.cookies.cookie;
+  if (userData === undefined) {
+    res.status(302);
+    return res.send({ redirectTo: "/user/login" });
+  }
   const { channel } = req.params;
   const { messageText } = req.body;
   const [
@@ -49,7 +62,14 @@ router.post("/messages/:channel", async function(req, res) {
       data: { id }
     }
   ] = await fetchChat(channel);
-  const [statusTwo, data] = await createMessage(id, messageText);
+  const [statusTwo, data] = await createMessage(
+    id,
+    messageText,
+    userData.user_name
+  );
+
+  const { io } = res.locals;
+  io.to(channel).emit("new-chat-message", data);
   res.status(statusTwo);
   res.send(data);
 });

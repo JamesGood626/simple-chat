@@ -39,6 +39,10 @@ router.post("/signup", async function(req, res) {
     res.json({ message: "Please provide a valid username." });
   }
   const [_status, responseData] = await user.saveToDatabase();
+  console.log(
+    "the responseData.data going on cookie in signup: ",
+    responseData.data
+  );
   res.cookie("cookie", responseData.data);
   res.redirect("/chat-lobby");
 });
@@ -56,7 +60,12 @@ router.post("/login", async function(req, res) {
   ) {
     // TODO: show a flash here
     res.render("login/index");
+    return;
   }
+  console.log(
+    "the responseData.data going on cookie in login: ",
+    responseData.data
+  );
   res.cookie("cookie", responseData.data);
   res.redirect("/chat-lobby");
 });

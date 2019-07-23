@@ -39,7 +39,7 @@ const fetchChats = () => {
 
 const fetchChatMessages = id => {
   return knex
-    .select("m.id", "m.text")
+    .select("m.id", "m.text", "m.sender")
     .from("chats as c")
     .leftJoin("chat_messages as cm", "cm.chat_id", "c.id")
     .leftJoin("messages as m", "cm.message_id", "m.id")

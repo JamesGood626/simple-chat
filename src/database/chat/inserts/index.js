@@ -25,10 +25,10 @@ const saveChatToDatabase = chat => {
     .catch(err => formatResponse());
 };
 
-const createMessage = async (chatId, messageText) => {
+const createMessage = async (chatId, messageText, sender) => {
   const result = await knex("messages")
-    .returning(["id", "text"])
-    .insert({ text: messageText })
+    .returning(["id", "text", "sender"])
+    .insert({ text: messageText, sender })
     .then(([data]) => data)
     .catch(err => formatResponse());
 

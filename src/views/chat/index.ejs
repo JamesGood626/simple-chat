@@ -5,7 +5,7 @@
     {{ text }}
     <ul id="example-1">
       <li v-for="message in messages">
-        {{ message.text }}
+        {{ message.sender }} {{ message.text }}
       </li>
     </ul>
     <div id="message-input-container">
@@ -18,21 +18,59 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const channel = window.location.pathname.split("/")[2];
+    // const joinChat = () => {
+    //   const socket = io("http://localhost:4000/");
+
+    //   socket.on("channel-joined", data => {
+    //     console.log("channel joined: ", data);
+    //   });
+
+    //   socket.on("new-chat-message", data => {
+    //     console.log("new-chat-message: ", data);
+    //   });
+
+    //   console.log("emitting join-chat");
+    //   socket.emit("join-chat", channel, data => {
+    //     console.log(data);
+    //   });
+    // };
 
     var app = new Vue({
       el: "#app",
       data: {
         text: "Hello Vue!",
-        messages: [],
+        messages: null,
         messageText: null
       },
       created: function() {
         console.log("Vue's before create running");
+        this.joinChat(channel);
         this.fetchChatMessages(`/chat/messages/${channel}`);
       },
       methods: {
+        joinChat() {
+          const socket = io(window.location.host);
+
+          socket.on("channel-joined", data => {
+            console.log("channel joined: ", data);
+          });
+
+          socket.on("new-chat-message", data => {
+            // console.log("new-chat-message: ", data);
+            this.handleNewMessage(data);
+          });
+
+          console.log("emitting join-chat");
+          socket.emit("join-chat", channel, data => {
+            console.log("join-chat data: ", data);
+          });
+        },
         setMessageText(e) {
           this.messageText = e.target.value;
+        },
+        handleNewMessage(data) {
+          console.log("Data inside handleNewMessage: ", data);
+          this.messages = [...this.messages, data.data];
         },
         async fetchChatMessages(path) {
           const {
@@ -50,23 +88,16 @@
             }
           );
 
-          if (status === 201) {
-            this.messageText = "";
-            this.messages = [...this.messages, data.data];
+          this.messageText = "";
+          if (status === 302) {
+            // `localhost:4000/${data.redirectTO}`
+            window.location.replace(data.redirectTo);
+          }
+          if (status === 400) {
+            this.error = "Message failed to send.";
           }
         }
       }
-    });
-
-    var socket = io("http://localhost:4000/");
-
-    socket.on("channel-joined", data => {
-      console.log("channel joined: ", data);
-    });
-
-    console.log("emitting join-chat");
-    socket.emit("join-chat", channel, data => {
-      console.log(data);
     });
   </script>
 </body>
