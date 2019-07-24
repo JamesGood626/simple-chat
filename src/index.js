@@ -1,5 +1,6 @@
 const server = require("./app");
 
-server.listen(4000, () => {
+const port = process.env.NODE_ENV === "test" ? 5000 : 4000;
+server.listen(port, () => {
   console.log("simple-chat listening on localhost:4000");
 });

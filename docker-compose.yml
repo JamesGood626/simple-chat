@@ -1,8 +1,21 @@
-version: "0.0.1"
+version: "2"
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     ports:
-      - "4000:80"
+      - "4000:4000"
+    volumes:
+      - .:/opt/app
     environment:
       LOCALHOST: host.docker.internal
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/opt/app
+    environment:
+      LOCALHOST: host.docker.internal
+    command: ["npm", "run", "test"]
