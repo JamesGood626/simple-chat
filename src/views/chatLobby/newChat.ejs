@@ -1,10 +1,18 @@
 <%- include('../layouts/header'); -%>
 <body>
-  <h3>New Chat</h3>
-  <form action="/chat-lobby/new" method="POST">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-    Chat Name: <input type="text" name="chatName" />
-    <button type="submit">Submit</button>
-  </form>
+  <div class="main-container the-flex-works">
+    <h3 id="signup-header">New Chat</h3>
+    <form
+      id="form"
+      class="the-flex-works"
+      action="/chat-lobby/new"
+      method="POST"
+    >
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <label for="chatname">Chat Name:</label>
+      <input id="chatname" type="text" name="chatName" />
+      <button type="submit">Submit</button>
+    </form>
+  </div>
 </body>
 <%- include('../layouts/footer'); -%>

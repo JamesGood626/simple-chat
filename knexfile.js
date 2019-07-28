@@ -56,9 +56,10 @@ module.exports = {
   production: {
     client: "postgresql",
     connection: {
-      database: "my_db",
-      user: "username",
-      password: "password"
+      database: process.env.SIMPLECHATDB_DB,
+      user: process.env.SIMPLECHATDB_USER,
+      password: process.env.SIMPLECHATDB_PASSWORD,
+      host: process.env.SIMPLECHATDB_HOSTNAME
     },
     pool: {
       min: 2,

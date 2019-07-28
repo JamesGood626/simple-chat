@@ -1,16 +1,24 @@
 <%- include('../layouts/header'); -%>
 <body>
-  <a href="/chat-lobby">Back to Chat Lobby</a>
-  <h3>Welcome to chat: <%= name %></h3>
-  <div id="app">
-    <ul id="message-list">
-      <li v-for="message in messages">
-        {{ message.sender }} {{ message.text }}
-      </li>
-    </ul>
-    <div id="message-input-container">
-      <input id="message-input" type="text" v-on:keyup="setMessageText" />
-      <button v-on:click="createChatMessage">Send Message</button>
+  <div class="main-container the-flex-works">
+    <div class="chat-inner-container">
+      <a href="/chat-lobby">Back to Chat Lobby</a>
+      <h3 id="signup-header">Welcome to: <%= name %></h3>
+      <div id="app">
+        <div id="message-list">
+          <div
+            v-for="message in messages"
+            v-bind:class="isYourMessage(message)"
+          >
+            <h4>{{ message.sender }}</h4>
+            <p>{{ message.text }}</p>
+          </div>
+        </div>
+        <div id="message-input-container">
+          <input id="message-input" type="text" v-on:keyup="setMessageText" />
+          <button v-on:click="createChatMessage">Send Message</button>
+        </div>
+      </div>
     </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
@@ -22,6 +30,8 @@
     var app = new Vue({
       el: "#app",
       data: {
+        user_name: null,
+        // v-bind:class="user_name "
         messages: null,
         messageText: null
       },
@@ -31,7 +41,10 @@
       },
       methods: {
         joinChat() {
-          const socket = io(window.location.host);
+          const socket = io(window.location.host, {
+            upgrade: false,
+            transports: ["websocket"]
+          });
 
           socket.on("channel-joined", data => {
             console.log("channel joined");
@@ -45,6 +58,11 @@
             console.log("joined chat");
           });
         },
+        isYourMessage: function(message) {
+          return message.sender === this.user_name
+            ? "your-message message"
+            : "other-message message";
+        },
         setMessageText(e) {
           this.messageText = e.target.value;
         },
@@ -53,8 +71,9 @@
         },
         async fetchChatMessages(path) {
           const {
-            data: { messages }
+            data: { messages, user_name }
           } = await axios.get(path);
+          this.user_name = user_name;
           this.messages = messages;
         },
         async createChatMessage(text) {

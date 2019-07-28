@@ -41,9 +41,9 @@ router.get("/messages/:channel", async function(req, res) {
     }
   ] = await fetchChat(channel);
   const messages = await fetchChatMessages(id);
-  console.log("The emssages!: ", messages);
+  // console.log("The emssages!: ", messages);
   res.status(200);
-  res.send({ messages });
+  res.send({ messages, user_name: userData.user_name });
 });
 
 // Vue component calls this

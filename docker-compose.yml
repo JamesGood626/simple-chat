@@ -1,6 +1,14 @@
 version: "2"
 services:
+  prod:
+    image: jamesgood626/simple-chat
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
   web:
+    image: jamesgood626/simple-chat
     build:
       context: .
       dockerfile: Dockerfile.dev

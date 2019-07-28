@@ -8,6 +8,10 @@ class Chat {
     this.channel = uuid();
   }
 
+  performUnsafeIO(fn) {
+    fn(this.name());
+  }
+
   async saveToDatabase() {
     return await saveChatToDatabase({ name: this.name, channel: this.channel });
   }

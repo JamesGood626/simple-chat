@@ -1,11 +1,17 @@
 <%- include('../layouts/header'); -%>
 <body>
-  <h1>This is Simple Chat</h1>
-    <a href="/user/signup">Sign Up</a>
-    <a href="/user/login">Log In</a>
-    <a href="/chat-lobby">
-      <h3>Go to Chat Lobby</h3>
-    </a>
+  <div class="main-container the-flex-works">
+    <h1 id="home-header">This is Simple Chat</h1>
+    <div id="home-nav-options-container" class="the-flex-works">
+        <div id="home-auth-links-container">
+            <a id="home-signup-link" class="home-auth-link the-flex-works" href="/user/signup">Sign Up</a>
+            <a id="home-login-link" class="home-auth-link the-flex-works" href="/user/login">Log In</a>
+        </div>
+        <a id="home-chatlobby-link" href="/chat-lobby">
+          <h3>Go to Chat Lobby</h3>
+        </a>
+    </div>
   </form>
+  </div>
 </body>
 <%- include('../layouts/footer'); -%>

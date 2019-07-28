@@ -3,6 +3,18 @@ const knex = require("../../index");
 const RETRIEVED_CHATS = "RETRIEVED_CHATS";
 const RETRIEVED_CHAT = "RETRIEVED_CHAT";
 
+knex
+  .raw("SELECT 'test connection';")
+  .then(message => {
+    // Success / boot rest of app
+    console.log("Knex is connected");
+  })
+  .catch(err => {
+    // Failure / timeout
+    console.log("Knex is NOT connected");
+    throw err;
+  });
+
 const formatResponse = (status = "", result = {}) => {
   switch (status) {
     case RETRIEVED_CHATS:

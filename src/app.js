@@ -14,7 +14,7 @@ applyMiddleware(app);
 
 app.set("view engine", "ejs");
 app.set("views", "./src/views");
-// app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public"));
 
 io.on("connection", function(socket) {
   console.log("a user connected");

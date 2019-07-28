@@ -1,14 +1,18 @@
 <%- include('../layouts/header'); -%>
 <body>
-  <h3>Welcome, <%= user_name %></h3>
-  <a href="/chat-lobby/new">Create New Chat</a>
-  <div>
-    <% chatList.forEach(function(chat) { %>
-    <div>
-      <h4><%= chat.name %></h4>
-      <a href="/chat/<%= chat.channel %>">Join Chat</a>
+  <div class="main-container the-flex-works">
+    <div class="chatlobby-inner-container">
+        <h1 id="chatlobby-header">Chat Lobby</h1>
+        <a id="chatlobby-newchat-link" class="the-flex-works" href="/chat-lobby/new">Create New Chat</a>
+        <div id="chatlobby-chatlist-container">
+          <% chatList.forEach(function(chat) { %>
+          <div class="chatlobby-chat">
+            <h3 id="chatlobby-chatname"><%= chat.name %></h4>
+            <a class="chat-link" href="/chat/<%= chat.channel %>">Join Chat</a>
+          </div>
+          <% }); %>
+        </div>
     </div>
-    <% }); %>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script>
