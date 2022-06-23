@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "jest": "^24.8.0",
-    "jsdom": "^15.1.1",
+    "jsdom": "^16.5.0",
     "supertest": "^4.0.2"
   }
 }
